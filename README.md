@@ -1,1 +1,1 @@
-This is a simple text editor, that can wwe use like a base for other projects.
+This is a simple text editor, that can be use like a base for another projects.
