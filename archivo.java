@@ -11,6 +11,15 @@ public class archivo{
     String last = "recientes.txt";
     //private ParStr [] recientes;
     String proyectName = "";
+    
+    public String fontSelected = "";
+    public int sizeSelected = 8;
+    public Color colorSelected = null;
+    public float spaceSelected = 1;
+    
+    public 
+    data = null;
+    
     public archivo(){
              
     }  
