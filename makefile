@@ -13,6 +13,7 @@ CLASSES = \
 		Menu.java \
 		Formato.java \
 		Fuente.java \
+		newProyect.java \
 		Ventana.java
 
 default: classes 
