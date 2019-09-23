@@ -4,11 +4,13 @@ import java.io.FileWriter;//Indica el archivo en el que se va a escribir.
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.IOException;
-
+import java.awt.Color;
 import java.awt.EventQueue;
+//import javax.swing.text.StyledDocument;
+//import javax.swing.text.Document;
 public class archivo{
     String dire = null;
-    String last = "recientes.txt";
+    //String last = "recientes.txt";
     //private ParStr [] recientes;
     String proyectName = "";
     
@@ -17,8 +19,7 @@ public class archivo{
     public Color colorSelected = null;
     public float spaceSelected = 1;
     
-    public 
-    data = null;
+    public String data = null;
     
     public archivo(){
              
@@ -26,8 +27,8 @@ public class archivo{
     public archivo(String direccion){
         dire = direccion;
     }
-    void save(String direccion, String data){//aca se pondra el parseo del string
-        saveString(direccion, data);
+    void save(String direccion){//aca se pondra el parseo del string
+        saveString(direccion);
     }
     String load(String direccion){//aca se pondra el parseo del string
         return loadString(direccion);
@@ -87,12 +88,20 @@ public class archivo{
         }
     }*/
     //'\'
-    void saveString(String direccion, String data){
+    void saveString(String direccion){
         if(data != null){
             if(direccion !=null)
                 dire = direccion;
+            
+            if(dire.charAt(dire.length()-1) != '/')
+                proyectName = "";
+            else{
+                if(proyectName == null || proyectName.equals("") || proyectName.equals(" "))
+                    proyectName ="default.txt";
+            }
+            
             try{
-                File  f = new File(dire);
+                File  f = new File(dire+proyectName);
                 FileWriter fw = new FileWriter(f);              
                 fw.write(data);
                 BufferedWriter bw = new BufferedWriter(fw);

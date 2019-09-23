@@ -9,6 +9,8 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.StyledDocument;
+import javax.swing.text.Document;
 class  Lienzo {
     JPanel canvas = new JPanel();
    // JTextField uno, dos, tres;
@@ -20,11 +22,12 @@ class  Lienzo {
     public Color colorSelected = null;
     public float spaceSelected = 1;
     public String prop = "";
-
+    Estilo e;
     
         
-    public Lienzo(Estilo e){
+    public Lienzo(Estilo est){
     //--------------Inicializacion de atributos----------------    
+        e = est;
         init_vars();
     //------------------------------
         canvas.setLayout(null);
@@ -49,16 +52,7 @@ class  Lienzo {
     JPanel lienzo(){
         return canvas;
     }
-    void changeText(int startsSel,int endsSel){
-        try{
-            changeText2(startsSel,endsSel);
-        }
-        
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
-    }
+
     void new_edit(){
         edit = new JTextPane();
     } 
@@ -70,7 +64,40 @@ class  Lienzo {
         spaceSelected = e.margin_text_Above;
         prop = "";
     }
-
+    String getText(){
+        String r= "";
+        try{
+            r = getText2();
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return r;
+    }
+    
+    String getText2()throws BadLocationException{
+        String res = "";//= edit.getStyledDocument();
+        Element element;
+        AttributeSet attrs2;
+        SimpleAttributeSet attrs;
+        for(int i = 0; i < edit.getStyledDocument().getLength(); i++){
+            String texto = edit.getStyledDocument().getText(i,1);
+            
+            element = edit.getStyledDocument().getCharacterElement(i);
+            attrs2 = element.getAttributes();
+            //aca va el cambio del atributo
+            
+            attrs = new SimpleAttributeSet(attrs2);
+            res += attrs+texto;
+        }
+        return res;
+    }
+    void changeText(int startsSel,int endsSel){
+        try{
+            changeText2(startsSel,endsSel);
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+    }
     //{"negrita","cursiva","subrayar","tachar","color","resaltar","fuente","tamano","borrar","insert","reemplazar"}
     // equivalent to
     //operacion = {'n','k','s','T','c','r','f','t','b','i','R'}
@@ -93,7 +120,7 @@ class  Lienzo {
             edit.getStyledDocument().remove(i,1);     
             edit.getStyledDocument().insertString(i, texto, attrs);
         }
-        
+        prop = "";//por las dudas reseteamos la propiedad elegida.
         //printArrays(); 
         
         //System.out.println("entro a 'check'");                       

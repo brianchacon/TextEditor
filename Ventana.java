@@ -8,6 +8,8 @@ import java.awt.Component;
 import java.awt.BorderLayout;
 import java.awt.Image;
 import java.awt.Cursor;
+
+
 class Ventana extends JFrame implements ActionListener{
     
     boolean CAMBIOS_SIN_GUARDAR = false;
@@ -107,30 +109,20 @@ class Ventana extends JFrame implements ActionListener{
         if(PATH_FILE != null){
 
             System.out.println("Saving file: " + PATH_FILE);
-            if(lienzo.lista == null)
-                System.out.println("Pre: llamda nula");
             archivo a = new archivo();
             a.proyectName = proyectName;
+            
             a.data = lienzo.getText();//TODO texto con atributos
-            a.fontSelected = lienzo.fontSelected;//TODO variables grales d lienzo
-            a.sizeSelected = lienzo.sizeSelected;
+            
+            a.fontSelected  = lienzo.fontSelected;
+            a.sizeSelected  = lienzo.sizeSelected;
             a.colorSelected = lienzo.colorSelected;
             a.spaceSelected = lienzo.spaceSelected;
-            a.escritor(PATH_FILE);
+            a.save(PATH_FILE);
             //TODO a.saveRecientes(recientes);
             CAMBIOS_SIN_GUARDAR = false;
             
-                //proyectName = p.nombre;
-                lienzo.new_edit();
-                lienzo.init_vars();
-                /*variable grales de lienzo
-                public String fontSelected = "TimesRoman";
-                public int sizeSelected ;
-               public Color colorSelected = null;
-                public float spaceSelected = 1;
-                    public String prop = "";
-                
-                */
+              
             
         }        
     }
@@ -149,14 +141,14 @@ class Ventana extends JFrame implements ActionListener{
         }    
     }
     void load(){//TODO
-    System.out.println("Selected file: " + PATH_FILE);
+/*    System.out.println("Selected file: " + PATH_FILE);
         archivo arch = new archivo();
         arch.lector(PATH_FILE);
         lienzo.lista = arch.l;
         proyectName = arch.proyectName;
         lienzo.indL = arch.indL;
         lienzo.load_lista();
-        setTitle(proyectName);
+        setTitle(proyectName);*/
     }
 
     void cursorDefault(){
