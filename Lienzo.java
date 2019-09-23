@@ -23,7 +23,7 @@ class  Lienzo {
     public float spaceSelected = 1;
     public String prop = "";
     Estilo e;
-    
+    public String sep = "[\code]";
         
     public Lienzo(Estilo est){
     //--------------Inicializacion de atributos----------------    
@@ -76,6 +76,7 @@ class  Lienzo {
     
     String getText2()throws BadLocationException{
         String res = "";//= edit.getStyledDocument();
+        
         Element element;
         AttributeSet attrs2;
         SimpleAttributeSet attrs;
@@ -87,10 +88,76 @@ class  Lienzo {
             //aca va el cambio del atributo
             
             attrs = new SimpleAttributeSet(attrs2);
-            res += attrs+texto;
+            res += sep+attrs+texto+sep;
         }
         return res;
     }
+    void load(String s){
+        try{
+            load_(s);
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+    }
+    boolean is_sep(String s, int i){
+        boolean res = true;
+
+   /*   boolean res = false;//simplest way, but no dinamic
+        if(s.charAt(i) == sep.charAt(0) && s.length()>=i+sep.length() && s.charAt(i+1)==sep.charAt(1) && s.charAt(i+2)==sep.charAt(2)&& s.charAt(i+3)==sep.charAt(3)&& s.charAt(i+4)==sep.charAt(4)&& s.charAt(i+5)==sep.charAt(5)&& s.charAt(i+6)==sep.charAt(6))
+            res = true;*/
+        int l = 0;
+        for( ;res && l<sep.length() && i+l<s.length();l++){
+            if(s.charAt(i+l) != sep.charAt(l))
+                res = false;
+        }
+        if(res && l != sep.length() && i+l>=s.length())
+            res = false;
+        return res;
+    }
+    
+    void load_(String s){//TODO throws BadLocationException
+    //.equals("[\code]")
+        String c;
+        String tmp = "";
+        SimpleAttributeSet attrs = new SimpleAttributeSet();
+        new_edit();
+        for(int i = 0,cp=0; i < s.length(); i++,cp++){
+           
+            attrs = new SimpleAttributeSet();      
+            if(is_sep(s,i)){
+                i += sep.length();
+                int j = i;
+                for ( ; j < s.length() && is_sep(s,j); j++)
+                    tmp += s.charAt();
+                if(is_sep(s,j)){
+                    i += tmp.length()+sep.length();
+                    int count = gimmeAtrib(tmp) ;
+                    for(int j=0;j< count;j++)
+                        attrs = set_atrib(attrs);
+                }    
+                else
+                   i -= sep.length();     
+            }
+            c = ""+s.charAt(i);
+            
+          
+            
+        //---
+            
+        
+            //String texto = edit.getStyledDocument().getText(i,1);
+            
+            //element = edit.getStyledDocument().getCharacterElement(i);
+            //attrs2 = element.getAttributes();
+            //aca va el cambio del atributo
+            
+            //attrs = new SimpleAttributeSet(attrs2);
+            //res += sep+attrs+texto+sep;
+            
+            edit.getStyledDocument().insertString(cp, c, attrs);
+        }
+    }
+    
     void changeText(int startsSel,int endsSel){
         try{
             changeText2(startsSel,endsSel);
