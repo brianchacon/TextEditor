@@ -23,7 +23,7 @@ class  Lienzo {
     public float spaceSelected = 1;
     public String prop = "";
     Estilo e;
-    public String sep = "[\code]";
+    public String sep = "[/code]";
         
     public Lienzo(Estilo est){
     //--------------Inicializacion de atributos----------------    
@@ -73,6 +73,27 @@ class  Lienzo {
         }
         return r;
     }
+    boolean match_(String s,String patter){
+        boolean res = false;
+
+        /*int l = 0;
+        for( ;res && l<patter.length() && i+l<s.length();l++){
+            if(s.charAt(i+l) != patter.charAt(l))
+                res = false;
+        }
+        if(res && l != patter.length() && i+l>=s.length())
+            res = false;
+            */
+        for(int i=0, j=0;!res && i+patter.length() < s.length();i++){
+            j = 0;
+            for(;j<patter.length() && i+j<s.length() && s.charAt(i+j) != patter.charAt(j);j++);
+            
+            if(j == patter.length())
+                res = true;
+        }
+            
+        return res;
+    }
     
     String getText2()throws BadLocationException{
         String res = "";//= edit.getStyledDocument();
@@ -88,7 +109,19 @@ class  Lienzo {
             //aca va el cambio del atributo
             
             attrs = new SimpleAttributeSet(attrs2);
-            res += sep+attrs+texto+sep;
+            String atr= attrs.toString();
+            System.out.println("Atributo "+i+"esimo:"+atr);
+            if(atr== null){
+                res += texto;
+                System.out.println("null");   
+            }else if(atr.equals("")){
+                res += texto;
+                System.out.println("vacio");   
+            }else if(match_(atr,"true")){
+                res += sep+attrs+texto+sep;
+                System.out.println("notTrue");   
+            }else
+                res += texto;
         }
         return res;
     }
@@ -114,31 +147,82 @@ class  Lienzo {
             res = false;
         return res;
     }
+    SimpleAttributeSet cutAtrib(String tmp, SimpleAttributeSet attrs){
+        String subStr = "";
+        int i;
+        for(int j=0;j<tmp.length()-1;j+=i){
+            i = j;
+            for(;i<tmp.length()-1 && tmp.charAt(i) != '=';i++)
+                subStr += tmp.charAt(i);
+            if(tmp.charAt(i) == '='){
+                //if(tmp.charAt(i+1)=='t')
+                i+=5;//#"=true" == 5 
+                //else
+                //i+=6;   //#"=false" == 6
+//
+//"foreground=java.awt.Color[r=255,g=30,b=30]"
+//"background=java.awt.Color[r=255,g=30,b=30]"
+                if(subStr.equals("bold"))
+                    StyleConstants.setBold(attrs,true);
+                else{
+                    System.out.println(" no = bold");
+                    if(subStr.equals("italic"))
+                        StyleConstants.setItalic(attrs,true);
+                    else{
+                        System.out.println(" no = italic");
+                        if(subStr.equals("underline"))
+                            StyleConstants.setUnderline(attrs,true);
+                        else{
+                            System.out.println(" no = underline");
+                            if(subStr.equals("strikethrough"))
+                                StyleConstants.setStrikeThrough(attrs,true);
+                            else{
+                                System.out.println(" no = strikethrough");
+                                if(subStr.equals("foreground"))
+                                    StyleConstants.setForeground(attrs,colorSelected);
+                                else{
+                                    System.out.println(" no = foreground");
+                                    if(subStr.equals("background"))
+                                        StyleConstants.setBackground(attrs,colorSelected);
+                                    else{
+                                        System.out.println(" no = background");
+                                    }    
+                                }    
+                            }    
+                        }    
+                    }    
+                }
+            }        
+        }
+        return attrs;
+    }
     
-    void load_(String s){//TODO throws BadLocationException
+    void load_(String s)throws BadLocationException{//TODO 
     //.equals("[\code]")
-        String c;
+        String c = "";
         String tmp = "";
         SimpleAttributeSet attrs = new SimpleAttributeSet();
         new_edit();
-        for(int i = 0,cp=0; i < s.length(); i++,cp++){
+        for(int i = 0,cp=0; i < s.length(); i++,cp++, c=""){
            
             attrs = new SimpleAttributeSet();      
             if(is_sep(s,i)){
                 i += sep.length();
                 int j = i;
                 for ( ; j < s.length() && is_sep(s,j); j++)
-                    tmp += s.charAt();
+                    tmp += s.charAt(j);
                 if(is_sep(s,j)){
                     i += tmp.length()+sep.length();
-                    int count = gimmeAtrib(tmp) ;
-                    for(int j=0;j< count;j++)
-                        attrs = set_atrib(attrs);
+                    c ="" + tmp.charAt(tmp.length()-1);
+                    attrs = cutAtrib(tmp,attrs);
+                    tmp = "";
+                       
                 }    
                 else
                    i -= sep.length();     
             }
-            c = ""+s.charAt(i);
+            if (c.equals(""))
+                c = ""+s.charAt(i);
             
           
             

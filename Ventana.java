@@ -141,14 +141,15 @@ class Ventana extends JFrame implements ActionListener{
         }    
     }
     void load(){//TODO
-/*    System.out.println("Selected file: " + PATH_FILE);
+        System.out.println("Selected file: " + PATH_FILE);
         archivo arch = new archivo();
-        arch.lector(PATH_FILE);
-        lienzo.lista = arch.l;
-        proyectName = arch.proyectName;
-        lienzo.indL = arch.indL;
-        lienzo.load_lista();
-        setTitle(proyectName);*/
+        lienzo.load(arch.load(PATH_FILE));
+        //proyectName = arch.proyectName;
+        //lienzo.fontSelected =  arch.fontSelected;
+        //lienzo.sizeSelected =  arch.sizeSelected;
+        //lienzo.colorSelected = arch.colorSelected;
+        //lienzo.spaceSelected = arch.spaceSelected;
+        //setTitle(proyectName);
     }
 
     void cursorDefault(){
