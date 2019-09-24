@@ -54,7 +54,7 @@ class  Lienzo {
     }
 
     void new_edit(){
-        edit = new JTextPane();
+        edit.setText("");
     } 
     void init_vars(){
      
@@ -86,7 +86,7 @@ class  Lienzo {
             */
         for(int i=0, j=0;!res && i+patter.length() < s.length();i++){
             j = 0;
-            for(;j<patter.length() && i+j<s.length() && s.charAt(i+j) != patter.charAt(j);j++);
+            for(;j<patter.length() && i+j<s.length() && s.charAt(i+j) != patter.charAt(j);j++){}
             
             if(j == patter.length())
                 res = true;
@@ -127,10 +127,60 @@ class  Lienzo {
     }
     void load(String s){
         try{
+             System.out.println("trying");
             load_(s);
         }catch (Exception ex){
             ex.printStackTrace();
         }
+    }
+    void load_(String s)throws BadLocationException{//TODO 
+    //.equals("[\code]")
+        String c = "";
+        String tmp = "";
+        SimpleAttributeSet attrs = new SimpleAttributeSet();
+        edit.setText("");
+        System.out.println("edit vacio");
+        for(int i = 0,cp=0; i < s.length(); i++,cp++, c=""){
+           
+            attrs = new SimpleAttributeSet();      
+            if(is_sep(s,i)){
+                i += sep.length();
+                int j = i;
+                for ( ; j < s.length() && is_sep(s,j); j++)
+                    tmp += s.charAt(j);
+                if(is_sep(s,j)){
+                    i += tmp.length()+sep.length();
+                    c ="" + tmp.charAt(tmp.length()-1);
+                    attrs = cutAtrib(tmp,attrs);
+                    tmp = "";
+                       
+                }    
+                else
+                   i -= sep.length();     
+            }
+            if (c.equals(""))
+                c = ""+s.charAt(i);
+            if(i==0)
+                System.out.println("i=0:"+c+"s[0]:"+s.charAt(i));
+            
+        //---
+            
+        
+            //String texto = edit.getStyledDocument().getText(i,1);
+            
+            //element = edit.getStyledDocument().getCharacterElement(i);
+            //attrs2 = element.getAttributes();
+            //aca va el cambio del atributo
+            
+            //attrs = new SimpleAttributeSet(attrs2);
+            //res += sep+attrs+texto+sep;
+            
+            edit.getStyledDocument().insertString(cp, c, attrs);
+        }
+        System.out.println(edit.getStyledDocument().getText(0,edit.getStyledDocument().getLength()));
+        /*scroll = new JScrollPane(edit);
+        canvas.add(scroll);
+        canvas.repaint();*/
     }
     boolean is_sep(String s, int i){
         boolean res = true;
@@ -197,50 +247,7 @@ class  Lienzo {
         return attrs;
     }
     
-    void load_(String s)throws BadLocationException{//TODO 
-    //.equals("[\code]")
-        String c = "";
-        String tmp = "";
-        SimpleAttributeSet attrs = new SimpleAttributeSet();
-        new_edit();
-        for(int i = 0,cp=0; i < s.length(); i++,cp++, c=""){
-           
-            attrs = new SimpleAttributeSet();      
-            if(is_sep(s,i)){
-                i += sep.length();
-                int j = i;
-                for ( ; j < s.length() && is_sep(s,j); j++)
-                    tmp += s.charAt(j);
-                if(is_sep(s,j)){
-                    i += tmp.length()+sep.length();
-                    c ="" + tmp.charAt(tmp.length()-1);
-                    attrs = cutAtrib(tmp,attrs);
-                    tmp = "";
-                       
-                }    
-                else
-                   i -= sep.length();     
-            }
-            if (c.equals(""))
-                c = ""+s.charAt(i);
-            
-          
-            
-        //---
-            
-        
-            //String texto = edit.getStyledDocument().getText(i,1);
-            
-            //element = edit.getStyledDocument().getCharacterElement(i);
-            //attrs2 = element.getAttributes();
-            //aca va el cambio del atributo
-            
-            //attrs = new SimpleAttributeSet(attrs2);
-            //res += sep+attrs+texto+sep;
-            
-            edit.getStyledDocument().insertString(cp, c, attrs);
-        }
-    }
+
     
     void changeText(int startsSel,int endsSel){
         try{

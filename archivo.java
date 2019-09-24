@@ -113,7 +113,7 @@ public class archivo{
     }
 
     String loadString(String direccion){
-        String result = null;
+        String result = "";
         if(direccion !=null)
             dire = direccion;   
         if(dire != null){
@@ -122,7 +122,11 @@ public class archivo{
                 if(f.exists()){
                     FileReader fr = new FileReader (f);
                     BufferedReader br = new BufferedReader(fr);
-                    while((result+=br.readLine())!=null){}
+                    String r ="";
+                     System.out.println("go to load");
+                     
+                    while((r=br.readLine())!=null){result+=r;}
+                    System.out.println("done to load");
                     fr.close();  
                 }  
             }

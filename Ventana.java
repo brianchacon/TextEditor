@@ -143,13 +143,16 @@ class Ventana extends JFrame implements ActionListener{
     void load(){//TODO
         System.out.println("Selected file: " + PATH_FILE);
         archivo arch = new archivo();
+        System.out.println("Archivo leido");
         lienzo.load(arch.load(PATH_FILE));
+       
         //proyectName = arch.proyectName;
         //lienzo.fontSelected =  arch.fontSelected;
         //lienzo.sizeSelected =  arch.sizeSelected;
         //lienzo.colorSelected = arch.colorSelected;
         //lienzo.spaceSelected = arch.spaceSelected;
         //setTitle(proyectName);
+        System.out.println("Archivo cargado");
     }
 
     void cursorDefault(){
@@ -198,7 +201,7 @@ class Ventana extends JFrame implements ActionListener{
                 File selectedFile = fileChooser.getSelectedFile();
                 PATH_FILE = selectedFile.getAbsolutePath();
                 load();
-                System.out.println("Selected file: " + PATH_FILE);
+                System.out.println("File loaded: " + PATH_FILE);
             }          
     
         }

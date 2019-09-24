@@ -48,11 +48,11 @@ class Estilo{
 //  ######### FIN DE COLORES  #########
 
 //  #########TODO: INICIO DE FORMATO TEXTO  #########    
-    int sizeFont = 20;
+    int sizeFont = 12;
     Font tituloFont = new Font( "Tahoma", Font.BOLD, sizeFont*2 ) ;
     String tituloFontFlia = "Tahoma";
     Font textoFont = new Font( "Tahoma", Font.BOLD, sizeFont ) ;//Default
-    String textoFontStr = "Tahoma";
+    String textoFontStr = "TimesRoman";
     Font textoFont2 = new Font( "Tahoma", Font.BOLD, sizeFont ) ;
     String textoFont2Str = "Tahoma";
     Font textoFont3 = new Font( "Tahoma", Font.BOLD, sizeFont ) ;
