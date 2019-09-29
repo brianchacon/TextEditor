@@ -127,7 +127,7 @@ class  Lienzo {
     }
     void load(String s){
         try{
-             System.out.println("trying");
+            
             load_(s);
         }catch (Exception ex){
             ex.printStackTrace();
@@ -139,48 +139,36 @@ class  Lienzo {
         String tmp = "";
         SimpleAttributeSet attrs = new SimpleAttributeSet();
         edit.setText("");
-        System.out.println("edit vacio");
+        
         for(int i = 0,cp=0; i < s.length(); i++,cp++, c=""){
            
             attrs = new SimpleAttributeSet();      
             if(is_sep(s,i)){
+            //System.out.println("primer 'is_sep' i:"+i);
                 i += sep.length();
                 int j = i;
-                for ( ; j < s.length() && is_sep(s,j); j++)
+                for ( ; j < s.length()-sep.length() && !is_sep(s,j); j++)//almacena el stilo y al final el CHAR afectado
                     tmp += s.charAt(j);
                 if(is_sep(s,j)){
-                    i += tmp.length()+sep.length();
-                    c ="" + tmp.charAt(tmp.length()-1);
+                    //System.out.println("segundos 'is_sep' tmp:'"+tmp+"'");
+                    i += tmp.length()+sep.length()-1;//¿-1¿ para que en la prox iteracion llege aa este vaalor
+                    //System.out.println("[i]:'"+s.charAt(i)+"'i:"+i);
+                    c ="" + tmp.charAt(tmp.length()-1);//[/c] bold:sSDFsdf 1[/c]
                     attrs = cutAtrib(tmp,attrs);
                     tmp = "";
                        
                 }    
-                else
-                   i -= sep.length();     
+                else{
+                   i -= sep.length();  
+                     
+                }    
             }
             if (c.equals(""))
                 c = ""+s.charAt(i);
-            if(i==0)
-                System.out.println("i=0:"+c+"s[0]:"+s.charAt(i));
-            
-        //---
-            
-        
-            //String texto = edit.getStyledDocument().getText(i,1);
-            
-            //element = edit.getStyledDocument().getCharacterElement(i);
-            //attrs2 = element.getAttributes();
-            //aca va el cambio del atributo
-            
-            //attrs = new SimpleAttributeSet(attrs2);
-            //res += sep+attrs+texto+sep;
-            
             edit.getStyledDocument().insertString(cp, c, attrs);
+             c = "";
         }
         System.out.println(edit.getStyledDocument().getText(0,edit.getStyledDocument().getLength()));
-        /*scroll = new JScrollPane(edit);
-        canvas.add(scroll);
-        canvas.repaint();*/
     }
     boolean is_sep(String s, int i){
         boolean res = true;
@@ -204,38 +192,43 @@ class  Lienzo {
             i = j;
             for(;i<tmp.length()-1 && tmp.charAt(i) != '=';i++)
                 subStr += tmp.charAt(i);
+            //TODO obtener color y parametros dist a '='
             if(tmp.charAt(i) == '='){
                 //if(tmp.charAt(i+1)=='t')
-                i+=5;//#"=true" == 5 
+                i+=6;//#"=true" == 5 
                 //else
                 //i+=6;   //#"=false" == 6
-//
+//TODO i para color i+=31;   -5 i+=26;
 //"foreground=java.awt.Color[r=255,g=30,b=30]"
 //"background=java.awt.Color[r=255,g=30,b=30]"
                 if(subStr.equals("bold"))
                     StyleConstants.setBold(attrs,true);
                 else{
-                    System.out.println(" no = bold");
+                     
                     if(subStr.equals("italic"))
                         StyleConstants.setItalic(attrs,true);
                     else{
-                        System.out.println(" no = italic");
+                        
                         if(subStr.equals("underline"))
                             StyleConstants.setUnderline(attrs,true);
                         else{
-                            System.out.println(" no = underline");
+                             
                             if(subStr.equals("strikethrough"))
                                 StyleConstants.setStrikeThrough(attrs,true);
                             else{
-                                System.out.println(" no = strikethrough");
-                                if(subStr.equals("foreground"))
-                                    StyleConstants.setForeground(attrs,colorSelected);
+                                 
+                                if(subStr.equals("foreground")){
+                                    StyleConstants.setForeground(attrs,Color.red);
+                                    i+=26;
+                                }    
                                 else{
-                                    System.out.println(" no = foreground");
-                                    if(subStr.equals("background"))
-                                        StyleConstants.setBackground(attrs,colorSelected);
+                                     
+                                    if(subStr.equals("background")){
+                                        StyleConstants.setBackground(attrs,Color.red);
+                                        i+=26;
+                                    }           
                                     else{
-                                        System.out.println(" no = background");
+                                        System.out.println(" no = format");
                                     }    
                                 }    
                             }    

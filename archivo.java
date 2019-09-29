@@ -123,10 +123,9 @@ public class archivo{
                     FileReader fr = new FileReader (f);
                     BufferedReader br = new BufferedReader(fr);
                     String r ="";
-                     System.out.println("go to load");
                      
                     while((r=br.readLine())!=null){result+=r;}
-                    System.out.println("done to load");
+      
                     fr.close();  
                 }  
             }
