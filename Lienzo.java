@@ -187,20 +187,40 @@ class  Lienzo {
     }
     SimpleAttributeSet cutAtrib(String tmp, SimpleAttributeSet attrs){
         String subStr = "";
+        Color colo = null;
         int i;
         for(int j=0;j<tmp.length()-1;j+=i){
             i = j;
-            for(;i<tmp.length()-1 && tmp.charAt(i) != '=';i++)
-                subStr += tmp.charAt(i);
+            subStr = "";
+            for(;i<tmp.length()-1 && tmp.charAt(i) != '=';i++){
+                if(tmp.charAt(i) != ' '){subStr += tmp.charAt(i);}
+            }
+                
             //TODO obtener color y parametros dist a '='
             if(tmp.charAt(i) == '='){
-                //if(tmp.charAt(i+1)=='t')
-                i+=6;//#"=true" == 5 
-                //else
-                //i+=6;   //#"=false" == 6
-//TODO i para color i+=31;   -5 i+=26;
+                
+//
 //"foreground=java.awt.Color[r=255,g=30,b=30]"
 //"background=java.awt.Color[r=255,g=30,b=30]"
+//if(tmp.charAt(i+1)=='t')
+                if(tmp.charAt(i+1) == 'j'){
+                    //i+=17;//'['
+                    int k =i+1;//saltamos '='
+                    for(;k< tmp.length()-1 && tmp.charAt(k) != '='; k++){}
+                    k++; String redTmp = "";
+                    for(;k< tmp.length()-1 && tmp.charAt(k) != ','; k++){ redTmp += tmp.charAt(k);}
+                    k+=3; String greenTmp = "";
+                    for(;k< tmp.length()-1 && tmp.charAt(k) != ','; k++){ greenTmp += tmp.charAt(k);}
+                    k+=3; String blueTmp = "";
+                    for(;k< tmp.length()-1 && tmp.charAt(k) != ']'; k++){ blueTmp += tmp.charAt(k);}
+                     	
+                    colo = new Color(Integer.parseInt(redTmp),Integer.parseInt(greenTmp),Integer.parseInt(blueTmp));
+                    i = k+1;//saltamos el espacio 
+                }
+                else
+                    i+=6;//#"=true" == 5 
+                //else
+                //i+=6;   //#"=false" == 6
                 if(subStr.equals("bold"))
                     StyleConstants.setBold(attrs,true);
                 else{
@@ -218,17 +238,17 @@ class  Lienzo {
                             else{
                                  
                                 if(subStr.equals("foreground")){
-                                    StyleConstants.setForeground(attrs,Color.red);
-                                    i+=26;
+                                    StyleConstants.setForeground(attrs,colo != null ? colo : Color.black);
+                                   
                                 }    
                                 else{
                                      
                                     if(subStr.equals("background")){
-                                        StyleConstants.setBackground(attrs,Color.red);
-                                        i+=26;
+                                        StyleConstants.setBackground(attrs,colo != null ? colo : Color.black);
+                                        
                                     }           
                                     else{
-                                        System.out.println(" no = format");
+                                        System.out.println(" no = format i:'"+i+"'[i]'"+tmp.charAt(i)+"' \""+subStr+"\"");
                                     }    
                                 }    
                             }    

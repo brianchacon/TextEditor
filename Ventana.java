@@ -8,7 +8,8 @@ import java.awt.Component;
 import java.awt.BorderLayout;
 import java.awt.Image;
 import java.awt.Cursor;
-
+import javax.swing.colorchooser.AbstractColorChooserPanel;
+import java.awt.Component; 
 
 class Ventana extends JFrame implements ActionListener{
     
@@ -128,7 +129,7 @@ class Ventana extends JFrame implements ActionListener{
     }
     private void guardarArchivoNuevo(){
         JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+        fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")+"/filesTests"));
         fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);//FILES_ONLY);
         
         int result = fileChooser.showSaveDialog(this);
@@ -193,7 +194,7 @@ class Ventana extends JFrame implements ActionListener{
             }
 
             JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+            fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")+"/filesTests"));
             fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
             int result = fileChooser.showOpenDialog(this);
             
@@ -243,22 +244,39 @@ class Ventana extends JFrame implements ActionListener{
         if (e.getSource()==menu.botColor){
             System.out.println("HA sido presionado: color");
             lienzo.prop = "color";
-            lienzo.colorSelected = selectedColor();
+            lienzo.colorSelected = selectedColor(this,"Color de fuente",lienzo.colorSelected);
             lienzo.changeText(lienzo.edit.getSelectionStart(),lienzo.edit.getSelectionEnd());
             CAMBIOS_SIN_GUARDAR = true;
         }
         if (e.getSource()==menu.botResal){
             System.out.println("HA sido presionado: resaltar");
             lienzo.prop = "resaltar";
-            lienzo.colorSelected = selectedColor();
+            lienzo.colorSelected = selectedColor(this,"Color de resaltado",lienzo.colorSelected);
             lienzo.changeText(lienzo.edit.getSelectionStart(),lienzo.edit.getSelectionEnd());
             CAMBIOS_SIN_GUARDAR = true;
         }
 /*TODO*/if (e.getSource()==menu.botPDF){System.out.println("HA sido presionado: pdf");}
     }
-    //TODO este debe pedir el color de un popUp
-    Color selectedColor(){
-        return (new Color(255,30,30));
+    //
+    Color selectedColor(Component component, String title, Color initial){
+
+        JColorChooser choose = new JColorChooser(initial);
+
+        JDialog dialog = JColorChooser.createDialog(component, title, true, choose, null, null);
+
+        AbstractColorChooserPanel[] panels = choose.getChooserPanels();
+        for (AbstractColorChooserPanel accp : panels) {
+            choose.removeChooserPanel(accp);
+        }
+
+        choose.addChooserPanel(panels[3]);
+
+        dialog.getContentPane().add(choose);
+        dialog.pack();
+        dialog.setVisible(true);//.show();
+
+        return choose.getColor();
+    
     }
 
 }
